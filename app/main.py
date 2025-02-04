@@ -6,6 +6,7 @@ from typing import List
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 import pandas as pd
+from fastapi.middleware.cors import CORSMiddleware
 import logging
 
 # Configure logging
@@ -32,9 +33,23 @@ class EmployeeResponse(BaseModel):
     salary: float
 
     class Config:
-        orm_mode = True
+        orm_mode: True
 
 app = FastAPI()
+
+# 添加 CORS 中間件
+origins = [
+    "http://localhost:3000",  # 允許來自前端應用程序的請求
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # 允許所有 HTTP 方法
+    allow_headers=["*"],  # 允許所有 HTTP 標頭
+)
 
 # ✅ 確保根路徑 `/` 可以正確回應
 @app.get("/")
@@ -140,6 +155,7 @@ def add_multiple_employees(employees: List[EmployeeCreate], db: Session = Depend
 async def upload_employees(file: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
         contents = await file.read()
+        file.file.seek(0)  # 重置文件指針
         df = pd.read_excel(pd.io.common.BytesIO(contents))
 
         required_fields = ["id", "name", "age", "position", "salary"]
