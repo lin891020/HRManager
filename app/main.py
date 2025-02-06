@@ -231,6 +231,10 @@ def export_employees(db: Session = Depends(get_db)):
     df = pd.DataFrame([emp.__dict__ for emp in employees])
     df.drop(columns=["_sa_instance_state"], inplace=True)
 
+    # 明確指定列的順序
+    columns_order = ["id", "name", "age", "position", "salary"]
+    df = df[columns_order]
+    
     filename = "employees_export.xlsx"
     df.to_excel(filename, index=False)
 
