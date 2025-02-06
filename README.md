@@ -18,6 +18,7 @@ HRManager is a **FastAPI + React** based **Human Resource Management System** th
 
 ## 📌 Project Overview
 **HRManager** offers the following features:
+
 ✅ **View all employees on the website**  
 ✅ **Add, edit, and delete employees via a web interface**  
 ✅ **Bulk upload employee data via Excel**  
