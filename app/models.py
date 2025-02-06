@@ -2,8 +2,8 @@ from sqlalchemy import Column, Integer, String, Float, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# 定義資料庫 URL（使用 SQLite）
-DATABASE_URL = "sqlite:///./employees.db"
+DATABASE_URL = "postgresql://Mike:1020@hrmanager-db-1:5432/hrmanager"
+
 
 # 建立資料庫連接引擎
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})

@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: Mike
+      POSTGRES_PASSWORD: 1020
+      POSTGRES_DB: hrmanager
+      POSTGRES_HOST: hrmanager-db-1
+      POSTGRES_PORT: 5432
+
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: Mike
+      POSTGRES_PASSWORD: 1020
+      POSTGRES_DB: hrmanager
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
